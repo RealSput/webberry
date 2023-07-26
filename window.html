@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Window Manager</title>
+  <link rel="stylesheet" href="styles/winbox.min.css">
+  <script src="scripts/winbox.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      /* Set the background color of the page */
+      position: relative;
+    }
+
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      /* Prevent the pseudo-element from capturing events */
+      background-image: radial-gradient(#ccc 1px, transparent 1px);
+      background-size: 20px 20px;
+      /* Adjust the size of the dots */
+    }
+
+    .speedometer {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      top: 50%;
+      width: 200px;
+      height: 100px;
+      border: 2px solid black;
+      border-radius: 100px 100px 0 0;
+      background: conic-gradient(from 180deg, blue 0%, red 100%);
+      overflow: hidden;
+    }
+
+    .needle {
+      position: absolute;
+      width: 2px;
+      height: 50px;
+      background: black;
+      left: 50%;
+      bottom: 0;
+      transform-origin: bottom;
+      transform: translateX(-50%) rotate(0deg);
+      transition: transform 0.3s ease;
+    }
+
+    .ticks {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+    }
+
+    .tick {
+      position: absolute;
+      width: 2px;
+      height: 10px;
+      background: black;
+    }
+
+    .value {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      color: white;
+      /* Set text color to white */
+    }
+
+    /* Styles for the slider */
+    .slider {
+      width: 80%;
+      margin: 20px auto;
+    }
+
+    .slider input[type="range"] {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="display: none;">
+    <div class="speedometer">
+      <div class="needle"></div>
+      <div class="ticks">
+        <div class="tick" style="transform: rotate(0deg);"></div>
+        <div class="tick" style="transform: rotate(45deg);"></div>
+        <div class="tick" style="transform: rotate(90deg);"></div>
+        <div class="tick" style="transform: rotate(135deg);"></div>
+        <div class="tick" style="transform: rotate(180deg);"></div>
+      </div>
+      <div class="value">0 °C</div>
+    </div>
+  </div>
+
+
+  <script>
+    const minTemperature = -90; // Minimum Celsius temperature value
+    const maxTemperature = 85; // Maximum Celsius temperature value
+
+    // Function to update the speedometer based on the temperature value
+    function updateSpeedometer(temperature) {
+      const minAngle = -180;
+      const maxAngle = 0;
+      const angleRange = maxAngle - minAngle;
+      const valueText = document.querySelectorAll('.value')[1];
+
+      // Convert the temperature value to an angle within the range
+      const temperaturePercentage = (temperature - minTemperature) / (maxTemperature - minTemperature);
+      const targetAngle = minAngle + angleRange * temperaturePercentage;
+
+      // Rotate the needle to the target angle
+      const needle = document.querySelectorAll('.needle')[1];
+      needle.style.transform = `translateX(-50%) rotate(${targetAngle}deg)`;
+
+      // Update the value text
+      valueText.innerText = temperature + ' °C';
+    }
+
+    window.windows = {};
+    
+    windows.temperature = new WinBox("Temperature", {
+      mount: document.querySelector(".speedometer").cloneNode(true),
+      width: "25%",
+      height: "25%",
+      hidden: true,
+    });
+
+    windows.terminal = new WinBox("Terminal", {
+      url: "./windows/terminal.html",
+      hidden: true,
+      width: "55%",
+      height: "55%"
+    });
+
+
+    windows.viewer = new WinBox("Viewer", {
+      url: "./windows/vnc.html",
+      hidden: true,
+      width: 1024,
+      height: 768,
+      maxwidth: 1024,
+      maxheight: 768
+    });
+
+
+    for (let i in windows) {
+      windows[i].removeControl("wb-full");
+      windows[i].removeControl("wb-min");
+      windows[i].removeControl("wb-max");
+      windows[i].setBackground('#303030');
+      windows[i].onclose = () => {
+    	windows[i].hide();
+    	return true;
+      }
+    }
+    
+    updateSpeedometer(0);
+    
+    const temp = new WebSocket(`${location.protocol == "https" ? "wss" : "ws"}://${location.hostname}:6969/temperature`);
+    temp.onmessage = (e) => {
+	updateSpeedometer(parseInt(e.data));
+    }  
+</script>
+</body>
+
+</html>

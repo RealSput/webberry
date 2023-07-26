@@ -1,0 +1,19 @@
+{
+  "name": "webberry",
+  "version": "1.0.0",
+  "description": "A web interface for your Raspberry Pi",
+  "main": "index.js",
+  "scripts": {
+    "run": "vncserver && node ."
+  },
+  "keywords": ["interface", "gui", "raspberrypi"],
+  "author": "diegab",
+  "license": "MIT",
+  "dependencies": {
+    "@maximegris/node-websockify": "^1.0.7",
+    "express": "^4.18.2",
+    "express-ws": "^5.0.2",
+    "node-pty": "^1.0.0",
+    "simplevnc": "github:iSchluff/simplevnc"
+  }
+}

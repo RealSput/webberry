@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebBerry Admin Interface</title>
+  <style>
+    body {
+      margin: 0px;
+      font-family: Arial, sans-serif;
+    }
+
+    .manager {
+      position: fixed;
+      border: none;
+      width: 90%;
+      height: 100%;
+      top: 0%;
+      left: 10%;
+    }
+
+    .sidebar {
+      position: fixed;
+      background-image: linear-gradient(to top, silver, white);
+      border: 1px solid f0f0f0;
+      box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
+      width: 10%;
+      height: 100%;
+      top: 0%;
+      left: 0%;
+      padding: 10px;
+    }
+
+    /* Styles for the button */
+    .side-button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      background-color: #333;
+      border: 2px solid #333;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Hover effect for the button */
+    .side-button:hover {
+      background-color: #555;
+      border-color: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <iframe class="manager" src="./window.html"> </iframe>
+  <div class="sidebar">
+    <h1> WebBerry </h1>
+    <br><br>
+    <button class="side-button temperature"> Temperature </button>
+    <br><br>
+    <button class="side-button terminal"> Terminal </button>
+    <br><br>
+    <button class="side-button viewer"> Viewer </button>
+  </div>
+  <script src="scripts/index.js"></script>
+</body>
+
+</html>

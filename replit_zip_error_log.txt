@@ -1,0 +1,1 @@
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file node_modules/node-pty/build/node_gyp_bins/python3","time":"2023-07-25T02:55:40Z"}

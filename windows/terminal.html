@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>xterm.js Hello World Example</title>
+  <!-- Include the xterm.js library -->
+  <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css" />
+  <style>
+    /* Add some basic styling to the terminal container */
+    * {
+        overflow: hidden !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    #terminal-container {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+    }
+    .xterm {
+      height: 100% !important;
+    }
+  </style>
+  <!-- Include the xterm.js library -->
+  <script src="https://unpkg.com/xterm"></script>
+  <script src="../../scripts/fit-addon.js"></script>
+  <script src="../../scripts/xterm-addon-attach.js"></script>
+</head>
+
+<body>
+  <div id="terminal-container"></div>
+
+  <script>
+    // Initialize xterm.js and the terminal container
+    const terminalContainer = document.getElementById('terminal-container');
+    const term = new Terminal();
+    term.open(terminalContainer);
+
+    const socket = new WebSocket(
+        `${document.location.protocol === "http:" ? "ws" : "wss"}://${
+          location.hostname
+        }:6969/sh`
+    );
+    
+    const connection_ = new AttachAddon.AttachAddon(socket);
+
+    const fitAddon = new FitAddon.FitAddon();
+    term.loadAddon(fitAddon);
+    term.loadAddon(connection_);
+
+    fitAddon.fit();
+
+    // Attach the terminal to the window resize event to keep it responsive
+    window.addEventListener('resize', () => {
+      fitAddon.fit();
+    });
+  </script>
+</body>
+
+</html>
