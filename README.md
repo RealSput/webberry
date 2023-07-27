@@ -8,11 +8,11 @@ It can do multiple things that would normally require more setup, or multiple ap
 - Monitoring the temperature
 
 # Usage
-First, install TightVNC on your Raspberry Pi for accessing the screen through the web interface:
+First, install TightVNC on your Raspberry Pi for accessing the screen through the web interface, and Node.js to make the interface work:
 ```
 sudo apt update
 sudo apt upgrade
-sudo apt install tightvncserver
+sudo apt install tightvncserver nodejs
 ```
 
 After that, clone this repo & CD into it with these commands:
