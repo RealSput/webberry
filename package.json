@@ -4,16 +4,25 @@
   "description": "A web interface for your Raspberry Pi",
   "main": "index.js",
   "scripts": {
-    "run": "vncserver && node ."
+    "start": "vncserver && node .",
+    "config": "node config"
   },
-  "keywords": ["interface", "gui", "raspberrypi"],
+  "keywords": [
+    "interface",
+    "gui",
+    "raspberrypi"
+  ],
   "author": "diegab",
   "license": "MIT",
   "dependencies": {
     "@maximegris/node-websockify": "^1.0.7",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-ws": "^5.0.2",
     "node-pty": "^1.0.0",
-    "simplevnc": "github:iSchluff/simplevnc"
+    "prompt-sync": "^4.2.0",
+    "simplevnc": "github:iSchluff/simplevnc",
+    "uuidv4": "^6.2.13"
   }
 }

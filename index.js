@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const fs = require('fs');
 const svnc = require('simplevnc');
@@ -9,7 +11,9 @@ const app = express();
 const server = http.createServer(app);
 
 require('express-ws')(ws_app);
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/public'));
+app.use(express.json());
+app.use(require('cookie-parser')());
 
 const readCpuTemperatureSync = () => fs.existsSync('/sys/class/thermal/thermal_zone0/temp') ? parseInt(fs.readFileSync('/sys/class/thermal/thermal_zone0/temp', 'utf8')) / 1000 : null;
 
@@ -19,6 +23,17 @@ ws_app.ws('/temperature', (ws) => {
     });
     ws.on('close', () => clearInterval(interval));
 });
+
+app.get('/interface.html', (req, res) => {
+  console.log('INTERFACE RUN');
+
+  let auth = req.cookies.auth;
+  if (process.env.TOKEN == auth) {
+    res.sendFile(__dirname + '/interface.html');
+  } else {
+    res.redirect('/');
+  }
+})
 
 ws_app.ws("/sh", (ws) => {
   const term = pty.spawn("bash", [], { name: "xterm-color" });
@@ -31,6 +46,16 @@ ws_app.ws("/sh", (ws) => {
   ws.on("close", () => term.kill());
 });
 
+app.post('/auth', (req, res) => {
+	const { username, password } = req.body;
+	if (process.env.USERNAME == username && process.env.PASSWORD == password) {
+		res.cookie('auth', process.env.TOKEN);
+		res.json({ success: true })
+	} else {
+		res.cookie('auth', 'NULL');
+		res.json({ success: false });
+	}
+});
 
 ws_app.listen(6969);
 server.listen(8080);
