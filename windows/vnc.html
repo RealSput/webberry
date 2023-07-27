@@ -11,11 +11,30 @@
       padding: 0;
       background: black;
     }
+    #console {
+	position: fixed;
+	top: 0%;
+	left: 0%;
+	background: none;
+	z-index: 1;
+	cursor: none !important;
+    }
+    #loader {
+    	position: absolute;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+	z-index: 0;
+    }
   </style>
+  <link rel="stylesheet" href="../styles/loader.css">
 </head>
 <body>
 
-  <canvas id="console" style="position: fixed; top: 0%; left: 0%;"></canvas>
+  <canvas id="console"></canvas>
+  <div id="loader">
+	<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+  </div>
   <script src="../scripts/vnc.js"></script>
   <script> document.querySelector('#console').onmousedown = () => window.focus(); </script>
 </body>
