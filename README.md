@@ -24,7 +24,7 @@ cd webberry
 And finally, run these commands to set up dependencies, configure & start WebBerry:
 ```
 npm install
-npm run-script setup
+npm run-script config
 npm start
 ```
 
