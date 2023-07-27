@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "vncserver && node .",
-    "config": "node config"
+    "config": "node scripts/config"
   },
   "keywords": [
     "interface",
