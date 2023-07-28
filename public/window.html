@@ -116,13 +116,14 @@
     const minTemperature = -90; // Minimum Celsius temperature value
     const maxTemperature = 85; // Maximum Celsius temperature value
 
+    let curr_mode = 'C';
+
+    const minAngle = -180;
+    const maxAngle = 0;
+    const angleRange = maxAngle - minAngle;
+
     // Function to update the speedometer based on the temperature value
     function updateSpeedometer(temperature) {
-      const minAngle = -180;
-      const maxAngle = 0;
-      const angleRange = maxAngle - minAngle;
-      const valueText = document.querySelectorAll('.value')[1];
-
       // Convert the temperature value to an angle within the range
       const temperaturePercentage = (temperature - minTemperature) / (maxTemperature - minTemperature);
       const targetAngle = minAngle + angleRange * temperaturePercentage;
@@ -132,7 +133,7 @@
       needle.style.transform = `translateX(-50%) rotate(${targetAngle}deg)`;
 
       // Update the value text
-      valueText.innerText = temperature + ' °C';
+      valueText.innerText = (curr_mode == 'C' ? temperature : (temperature * 9 / 5) + 32) + ' °' + curr_mode;
     }
 
     window.windows = {};
@@ -172,7 +173,9 @@
     	return true;
       }
     }
-    
+
+    const valueText = document.querySelectorAll('.value')[1];
+    valueText.onclick = () => curr_mode == 'F' ? curr_mode = 'C' : curr_mode = 'F';
     updateSpeedometer(0);
     
     const temp = new WebSocket(`${location.protocol == "https" ? "wss" : "ws"}://${location.hostname}:6969/temperature`);
