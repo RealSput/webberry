@@ -6,6 +6,7 @@ It can do multiple things that would normally require more setup, or multiple ap
 - Viewing your monitor
 - Using your terminal
 - Monitoring the temperature
+- Shutting your Pi off remotely
 
 # Usage
 First, install TightVNC on your Raspberry Pi for accessing the screen through the web interface, and Node.js to make the interface work:
