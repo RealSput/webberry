@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const { execSync } = require('child_process');
 const express = require('express');
 const fs = require('fs');
 const svnc = require('simplevnc');
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(require('cookie-parser')());
 
 const readCpuTemperatureSync = () => fs.existsSync('/sys/class/thermal/thermal_zone0/temp') ? parseInt(fs.readFileSync('/sys/class/thermal/thermal_zone0/temp', 'utf8')) / 1000 : null;
+const shutdownPi = () => { try { execSync('sudo shutdown now'); return true; } catch (error) { return false; } };
 
 ws_app.ws('/temperature', (ws) => {
     let interval = setInterval(() => {
@@ -32,6 +34,16 @@ app.get('/interface.html', (req, res) => {
     res.sendFile(__dirname + '/interface.html');
   } else {
     res.redirect('/');
+  }
+})
+
+app.get('/shutdown', (req, res) => {
+let auth = req.cookies.auth;
+  if (process.env.TOKEN == auth) {
+      console.log('SHUTDOWN');
+      shutdownPi();
+  } else {
+      res.status(400).send('token not authorized')
   }
 })
 
